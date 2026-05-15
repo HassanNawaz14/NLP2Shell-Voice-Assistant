@@ -1,0 +1,21 @@
+# Models and Data
+models/
+data/
+temp_recording.wav
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+env/
+.env
+
+# IDEs
+.vscode/
+.idea/
+.ipynb_checkpoints/
+
+# Local logs
+*.log
