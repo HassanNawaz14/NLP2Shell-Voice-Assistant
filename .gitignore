@@ -19,3 +19,7 @@ env/
 
 # Local logs
 *.log
+
+GEMINI.md
+GEMINI_phase3_4
+finetunig-Kaggle
