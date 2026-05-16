@@ -5,17 +5,19 @@
 ████╗  ██║██║     ██╔══██╗╚════██╗██╔════╝██║  ██║██╔════╝██║     ██║
 ██╔██╗ ██║██║     ██████╔╝ █████╔╝███████╗███████║█████╗  ██║     ██║
 ██║╚██╗██║██║     ██╔═══╝ ██╔═══╝ ╚════██║██╔══██║██╔══╝  ██║     ██║
-██║ ╚████║███████╗██║     ███████╗███████║██║  ██║███████╗███████╗███████╗
-╚═╝  ╚═══╝╚══════╝╚═╝     ╚══════╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝
+-----██║ ╚████║███████╗██║     ███████╗███████║██║  ██║███████╗███████╗███████╗
+-----╚═╝  ╚═══╝╚══════╝╚═╝     ╚══════╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝
 ```
 
 **Speak naturally. Execute instantly.**
 
-*Natural language → shell command, right in your terminal.*
+_Natural language → shell command, right in your terminal._
+</br>
+**NLP2Shell** — because life is too short to remember every bash flag.
 
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![Model](https://img.shields.io/badge/Model-Qwen2.5--0.5B-FF6B35?style=flat-square)](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct)
-[![Fine--tuned on](https://img.shields.io/badge/Dataset-NL2Bash-brightgreen?style=flat-square)](https://huggingface.co/datasets/AnishJoshi/nl2bash-custom)
+[![Fine--tuned on](https://img.shields.io/badge/Dataset-NL2Bash-brightgreen?style=flat-square)](https://huggingface.co/datasets/DiyRex/nl2bash-combined)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-Active%20Development-blue?style=flat-square)]()
 
@@ -67,13 +69,13 @@ NLP2Shell bridges that gap. You describe what you want. It figures out the comma
 │                        NLP2Shell                            │
 │                                                             │
 │   Voice Input ──► Whisper STT ──► Natural Language Text     │
-│   Text Input  ──────────────────────────────────────────►  │
+│   Text Input  ──────────────────────────────────────────►   │
 │                                                             │
 │                    Fine-tuned Qwen2.5-0.5B                  │
-│                    (LoRA adapter, CPU inference)             │
+│                    (LoRA adapter, CPU inference)            │
 │                              │                              │
 │                              ▼                              │
-│                    Predicted Bash Command                    │
+│                    Predicted Bash Command                   │
 │                              │                              │
 │                    ┌─────────▼─────────┐                    │
 │                    │   Safety Layer    │                    │
@@ -87,40 +89,42 @@ NLP2Shell bridges that gap. You describe what you want. It figures out the comma
 
 ### Core Modules
 
-| Module | File | Purpose |
-|---|---|---|
-| Speech-to-Text | `src/stt.py` | Whisper tiny, mic input, silence detection |
-| Inference | `src/predictor.py` | Loads LoRA adapter, runs prediction |
-| Safety | `src/safety.py` | Blocklist, path validation, allowlist |
-| Executor | `src/executor.py` | Confirm + subprocess, logs history |
-| Pipeline | `src/pipeline.py` | Connects all modules |
-| CLI | `cli/main.py` | Rich terminal UI, argument parsing |
+| Module         | File               | Purpose                                    |
+| -------------- | ------------------ | ------------------------------------------ |
+| Speech-to-Text | `src/stt.py`       | Whisper tiny, mic input, silence detection |
+| Inference      | `src/predictor.py` | Loads LoRA adapter, runs prediction        |
+| Safety         | `src/safety.py`    | Blocklist, path validation, allowlist      |
+| Executor       | `src/executor.py`  | Confirm + subprocess, logs history         |
+| Pipeline       | `src/pipeline.py`  | Connects all modules                       |
+| CLI            | `cli/main.py`      | Rich terminal UI, argument parsing         |
 
 ---
 
 ## Tech Stack
 
 ### Inference (Local)
+
 - **[Whisper](https://github.com/openai/whisper)** — speech to text, tiny model, CPU only
 - **[Qwen2.5-0.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct)** — base LLM
 - **[PEFT](https://github.com/huggingface/peft)** — LoRA adapter loading
 - **[Rich](https://github.com/Textualize/rich)** — terminal UI
 
 ### Training (Kaggle T4 GPU)
+
 - **[TRL SFTTrainer](https://huggingface.co/docs/trl)** — supervised fine-tuning
 - **[BitsAndBytes](https://github.com/TimDettmers/bitsandbytes)** — 4-bit quantization (NF4)
-- **[NL2Bash dataset](https://huggingface.co/datasets/AnishJoshi/nl2bash-custom)** — 26k NL→Bash pairs
+- **[NL2Bash dataset](https://huggingface.co/datasets/DiyRex/nl2bash-combined)** — 31k NL→Bash pairs + 1k Custom pairs for unbaised learning!
 
 ---
 
 ## Hardware Requirements
 
-| Component | Minimum | Recommended |
-|---|---|---|
-| RAM | 4 GB | 8 GB |
-| Storage | 2 GB free | 5 GB free |
-| GPU | Not required | Any CUDA GPU |
-| CPU | Any x86-64 | i5 6th gen+ |
+| Component | Minimum      | Recommended  |
+| --------- | ------------ | ------------ |
+| RAM       | 4 GB         | 8 GB         |
+| Storage   | 2 GB free    | 5 GB free    |
+| GPU       | Not required | Any CUDA GPU |
+| CPU       | Any x86-64   | i5 6th gen+  |
 
 > Runs fully on CPU. Tested on Intel HD 520 with 8GB RAM.
 
@@ -130,7 +134,7 @@ NLP2Shell bridges that gap. You describe what you want. It figures out the comma
 
 ```bash
 # Clone the repo
-git clone https://github.com/yourusername/nlp2shell.git
+git clone https://github.com//HassanNawaz14/NLP2Shell-Voice-Assistant.git
 cd nlp2shell
 
 # Install dependencies
@@ -216,16 +220,16 @@ You said: "delete everything"
 
 ## Model Details
 
-| Property | Value |
-|---|---|
-| Base model | Qwen2.5-0.5B-Instruct |
-| Fine-tuning method | LoRA (r=16, α=32) |
-| Training data | NL2Bash — 26,436 pairs |
-| Training hardware | Kaggle T4 GPU (free tier) |
-| Quantization | 4-bit NF4 (BitsAndBytes) |
-| Inference device | CPU |
-| Prompt format | Qwen chat template |
-| Parameters trained | ~0.66% (LoRA only) |
+| Property           | Value                     |
+| ------------------ | ------------------------- |
+| Base model         | Qwen2.5-0.5B-Instruct     |
+| Fine-tuning method | LoRA (r=16, α=32)         |
+| Training data      | NL2Bash — 26,436 pairs    |
+| Training hardware  | Kaggle T4 GPU (free tier) |
+| Quantization       | 4-bit NF4 (BitsAndBytes)  |
+| Inference device   | CPU                       |
+| Prompt format      | Qwen chat template        |
+| Parameters trained | ~0.66% (LoRA only)        |
 
 ---
 
@@ -255,9 +259,9 @@ nlp2shell/
 
 - [x] Dataset preparation and cleaning
 - [x] LoRA fine-tuning on NL2Bash (Qwen2.5-0.5B)
-- [ ] Local inference pipeline (`src/`)
-- [ ] Rich CLI interface
-- [ ] Voice input via Whisper
+- [x] Local inference pipeline (`src/`)
+- [x] Rich CLI interface
+- [x] Voice input via Whisper
 - [ ] Evaluation metrics (exact match, BLEU, execution success)
 - [ ] Upgrade to Phi-3.5-mini (background training)
 - [ ] Shell history learning — fine-tune on user's own commands
@@ -276,10 +280,10 @@ nlp2shell/
 
 ## Built By
 
-**Hassan Nawaz** — 4th semester BS Data Science student  
+**Hassan Nawaz** — 4th semester BS Data Science Sophomore @FAST NUCES Lahore.
 Built as a portfolio project exploring NLP + systems intersection.
 
-> *"I wanted a faster way to do everyday terminal tasks without memorizing every flag and syntax. This is that."*
+> _"I wanted a faster way to do everyday terminal tasks without memorizing every flag and syntax. This is that."_
 
 ---
 
@@ -296,6 +300,6 @@ Built as a portfolio project exploring NLP + systems intersection.
 
 **NLP2Shell** — because life is too short to remember every bash flag.
 
-*MIT License · Made with terminal love*
+_MIT License · Made with terminal love_
 
 </div>
