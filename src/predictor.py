@@ -15,7 +15,6 @@ def load_model(model_path: str) -> None:
     """Load Qwen base model and apply LoRA adapter on CPU."""
     global _model, _tokenizer
     
-    print(f"Loading base model: {BASE_MODEL_NAME}...")
     # Load base model on CPU
     _model = AutoModelForCausalLM.from_pretrained(
         BASE_MODEL_NAME,
@@ -23,15 +22,12 @@ def load_model(model_path: str) -> None:
         device_map="cpu"
     )
     
-    print(f"Applying LoRA adapter from: {model_path}...")
     # Apply LoRA adapter
     _model = PeftModel.from_pretrained(_model, model_path)
     _model.eval()
     
-    print("Loading tokenizer...")
+    # Load tokenizer
     _tokenizer = AutoTokenizer.from_pretrained(model_path)
-    
-    print("Model loaded successfully on CPU.")
 
 def predict(natural_language: str) -> str:
     """Take NL string, return predicted bash command string using ChatML format."""

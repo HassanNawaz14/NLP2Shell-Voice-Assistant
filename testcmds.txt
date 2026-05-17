@@ -1,0 +1,14 @@
+1. "list all files larger than 50MB in home directory"
+   → find ~/ -size +50M -type f
+
+2. "move all PDF files from Downloads to Documents"
+   → mv ~/Downloads/*.pdf ~/Documents/
+
+3. "find all python files modified in the last 7 days"
+   → find . -name "*.py" -mtime -7
+
+4. "create a folder called projects inside home"
+   → mkdir ~/projects
+
+5. (voice only) "show me how much space each folder is using"
+   → du -sh ~/*/

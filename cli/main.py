@@ -19,16 +19,16 @@ console = Console()
 def show_banner():
     """Display a professional ASCII-style banner."""
     banner = Text()
-    banner.append(" █▄▄ █   █▀█ ▀█▀ █▀█ █▀█ █ █ █▀▀ █   █  \n", style="bold bright_blue")
-    banner.append(" █ █ █▄▄ █▀▀  █  ▀▀█ ▀▀█ █▀█ ██▄ █▄▄ █▄▄\n", style="bold cyan")
+    banner.append(" █▄ █ █   █▀█  ▀█▀ █▀█  █▀▀ █ █ █▀▀ █   █  \n", style="bold bright_blue")
+    banner.append(" █ ▀█ █▄▄ █▀▀   █  █▄█  ▀▀█ █▀█ ██▄ █▄▄ █▄▄\n", style="bold cyan")
     banner.append("   Natural Language to Shell Assistant  ", style="italic dim")
     
     console.print(Align.center(Panel(banner, border_style="bright_blue", padding=(1, 4))))
     console.print()
 
 def show_system_info(args):
-    """Display a summary of the current system configuration."""
-    table = Table(show_header=False, box=None, padding=(0, 2))
+    """Display a summary of the current system configuration and available commands."""
+    config_table = Table(show_header=False, box=None, padding=(0, 2))
     
     # Model info
     model_name = "Qwen2.5-0.5B (LoRA)"
@@ -41,14 +41,38 @@ def show_system_info(args):
     # WSL info
     wsl_status = "[green]Enabled[/green]" if shutil.which("wsl") else "[red]Disabled[/red]"
     
-    table.add_row("[bold]Model:[/bold]", model_name)
-    table.add_row("[bold]Device:[/bold]", device)
-    table.add_row("[bold]Input:[/bold]", f"{mode}{safe}")
-    table.add_row("[bold]WSL:[/bold]", wsl_status)
-    table.add_row("[bold]OS:[/bold]", platform.system())
+    config_table.add_row("[bold blue]Model:[/bold blue]", model_name)
+    config_table.add_row("[bold blue]Device:[/bold blue]", device)
+    config_table.add_row("[bold blue]Input:[/bold blue]", f"{mode}{safe}")
+    config_table.add_row("[bold blue]WSL:[/bold blue]", wsl_status)
+    config_table.add_row("[bold blue]OS:[/bold blue]", f"{platform.system()} {platform.release()}")
+
+    # Commands info
+    cmd_table = Table(show_header=False, box=None, padding=(0, 2))
+    cmd_table.add_row("[bold yellow]Ctrl+M[/bold yellow]", "Toggle Voice/Text mode")
+    cmd_table.add_row("[bold yellow]/text[/bold yellow]", "Switch to text mode")
+    cmd_table.add_row("[bold yellow]/voice[/bold yellow]", "Switch to voice mode")
+    cmd_table.add_row("[bold red]exit[/bold red]", "Close the application")
+
+    console.print(Align.center(
+        Panel(
+            config_table, 
+            title="[bold]System Configuration[/bold]", 
+            border_style="bright_blue", 
+            width=60
+        )
+    ))
     
-    console.print(Align.center(Panel(table, title="System Configuration", border_style="dim", width=60)))
-    console.print(Align.center("[dim]Type 'exit' or 'quit' to close • Ctrl+C for emergency stop[/dim]"))
+    console.print(Align.center(
+        Panel(
+            cmd_table, 
+            title="[bold]Control Commands[/bold]", 
+            border_style="yellow", 
+            width=60
+        )
+    ))
+    
+    console.print(Align.center("[dim]Ctrl+C for emergency stop[/dim]"))
     console.print()
 
 def main():
